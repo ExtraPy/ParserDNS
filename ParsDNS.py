@@ -22,7 +22,6 @@ while Checking:
 
     url_soup = BeautifulSoup(url_content.text,'html.parser')
 
-
     if not url_soup.find_all("div","catalog-item"):
         print("Запись окончена. На страницах больше нет данных. файл .xls сохранен в рабочем каталоге.")
         Checking = False
@@ -39,10 +38,11 @@ while Checking:
         price_forstring = price_soup.find('span','current-price-value').text.split()[0]+price_soup.find('span','current-price-value').text.split()[1]
 
         item_list = [
+            check.find('div', 'product-info__title-link').text,  # Информация о продукте
             int(price_soup.find('div','price-item-code').find('span').text),     #Код продукта
-            check.find('div', 'product-info__title-link').text,     #Информация о продукте
-            check.find('span', 'product-info__title-description').text,     #Характеристики продукта
-            price_forstring     #Цена в руб
+            #check.find('span', 'product-info__title-description').text,     #Характеристики продукта
+            price_forstring,     #Цена в руб
+            check.find('img').get('data-src')
         ]
         for item in item_list:
             ws.write(i,ii,item)
@@ -51,6 +51,11 @@ while Checking:
         print(item_list)
         wb.save('{}.xls'.format(name))
         print('Сохранено\n')
+
+        if i>10:
+            Checking = False
+            print('Первые 10 позиций за 2020 год сохранены.')
+            break
 
     else:
         count+=1
