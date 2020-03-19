@@ -6,9 +6,11 @@ wb = xlwt.Workbook()
 ws = wb.add_sheet('sheet0', cell_overwrite_ok=True)
 
 Checking = True
+list_forex = ['наименование','код товара','цена','ссылка на картинку']
 count = 1   # Минимально-возможная страница
 i = 0   #Для работы со столбцами
 ii = 0  #Для работы со строками
+iii = 0
 
 name = str(input("Введите названия для файла без расширения: "))
 
@@ -45,8 +47,13 @@ while Checking:
             check.find('img').get('data-src')
         ]
         for item in item_list:
+            ws.write(i,ii,list_forex[iii])
+            ii+=1
+            iii+=1
             ws.write(i,ii,item)
             ii+=1
+        else:
+            iii=0
         i+=1
         print(item_list)
         wb.save('{}.xls'.format(name))
